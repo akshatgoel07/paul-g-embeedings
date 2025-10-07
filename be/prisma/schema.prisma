@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// model Story {
+//   id      Int      @id
+//   title   String
+//   url     String?
+//   author  String?
+//   time    DateTime
+//   context String?
+//   chunks  Chunk[]
+// }
+
+// model Chunk {
+//   id      String @id @default(cuid())
+//   text    String
+//   storyId Int
+//   story   Story  @relation(fields: [storyId], references: [id])
+// }
+
+model Essays {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String
+  content     String
+  link        String       @unique
+  Hyperlinks  Hyperlinks[]
+}
+
+model Hyperlinks {
+  id      Int    @id @default(autoincrement())
+  essayId Int
+  essays  Essays @relation(fields: [essayId], references: [id])
+}
