@@ -2,6 +2,10 @@ import { promisify } from "util";
 import { parseString } from "xml2js";
 import axios from "axios";
 import { prisma } from "./db.ts";
+import {
+  cleanHtmlContent,
+  extractEssayContent,
+} from "./utils/contentCleaner.js";
 
 async function main() {
   const xml = await fetchRssFeed(
@@ -27,28 +31,50 @@ async function fetchRssFeed(url: string): Promise<string> {
 async function parseRSStoEssays(xmlData: string) {
   const result = await parseXML(xmlData);
   const items = result.rss.channel[0].item;
-  console.log(items, "result");
+  // console.log(`Found ${items.length} essays in RSS feed`);
 
   for (const essay of items) {
     const exists = await prisma.essays.findUnique({
       where: { link: essay.link[0] },
     });
-    console.log(exists, "exists");
-
-    const htmlContent = await fetchEssayContent(essay.link[0]);
 
     if (!exists) {
+      console.log(`Processing new essay: ${essay.title[0]}`);
+
+      const htmlContent = await fetchEssayContent(essay.link[0]);
+      const cleanedContent = cleanHtmlContent(htmlContent);
+
+      console.log(
+        `Original content length: ${htmlContent.length}, Cleaned content length: ${cleanedContent.length}`,
+      );
+
       const res = await prisma.essays.create({
         data: {
           title: essay.title[0],
-          description: "",
+          description: essay.description ? essay.description[0] : "",
           content: htmlContent,
+          cleanContent: cleanedContent,
           link: essay.link[0],
         },
       });
-      console.log(res, "res");
+      console.log(`Saved essay: ${res.title}`);
     } else {
       console.log(`Essay already exists: ${essay.title[0]}`);
+
+      if (!exists.cleanContent) {
+        console.log(
+          `Updating existing essay with cleaned content: ${essay.title[0]}`,
+        );
+        const cleanedContent = cleanHtmlContent(exists.content);
+
+        await prisma.essays.update({
+          where: { id: exists.id },
+          data: {
+            cleanContent: cleanedContent,
+          },
+        });
+        console.log(`Updated essay with cleaned content`);
+      }
     }
   }
 }
@@ -61,7 +87,6 @@ async function fetchEssayContent(url: string) {
   });
   return res.data;
 }
-
 // async function fetchAndSaveEssayContent(url: string) {
 //   try {
 //     const res = await axios.get(url, {

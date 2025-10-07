@@ -25,12 +25,13 @@ datasource db {
 // }
 
 model Essays {
-  id          Int          @id @default(autoincrement())
-  title       String
-  description String
-  content     String
-  link        String       @unique
-  Hyperlinks  Hyperlinks[]
+  id           Int          @id @default(autoincrement())
+  title        String
+  description  String
+  content      String // Raw HTML content
+  cleanContent String? // Cleaned text content for embeddings
+  link         String       @unique
+  Hyperlinks   Hyperlinks[]
 }
 
 model Hyperlinks {
