@@ -123,7 +123,7 @@ All variables live in `.env` (see `.env.example`). Validated at startup by
 - [x] **Phase 3 — Core + ingest:** clients + cache tiers; RSS→clean→chunk→embed→Qdrant.
 - [x] **Phase 4 — API:** Hono `/chat` (SSE) with cache → retrieve → rerank → generate.
 - [x] **Phase 5 — Web:** React chat UI with streaming + citations.
-- [ ] **Phase 6 — ML:** Python eval harness + persona fine-tuning.
+- [x] **Phase 6 — ML:** Python eval harness + persona fine-tuning.
 
 ---
 
