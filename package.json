@@ -1,0 +1,22 @@
+{
+  "name": "paul-g-embeddings",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.12.2",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "ingest": "pnpm --filter @pg/ingest run ingest"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "turbo": "^2.3.3",
+    "typescript": "^5.9.2"
+  }
+}
