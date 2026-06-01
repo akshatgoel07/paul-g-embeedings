@@ -119,7 +119,7 @@ All variables live in `.env` (see `.env.example`). Validated at startup by
 ## Build phases
 
 - [x] **Phase 1 — Foundation:** monorepo, Docker infra, env, one-command start, README.
-- [ ] **Phase 2 — DB + shared:** Prisma schema (Essays, Chunk metadata), zod contracts.
+- [x] **Phase 2 — DB + shared:** Prisma schema (Essays, Chunk metadata), zod contracts.
 - [ ] **Phase 3 — Core + ingest:** clients + cache tiers; RSS→clean→chunk→embed→Qdrant.
 - [ ] **Phase 4 — API:** Hono `/chat` (SSE) with cache → retrieve → rerank → generate.
 - [ ] **Phase 5 — Web:** React chat UI with streaming + citations.

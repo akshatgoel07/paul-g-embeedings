@@ -19,8 +19,8 @@ down: ## Stop infra containers
 dev: up migrate ## One command: infra up + migrate + run all apps
 	pnpm dev
 
-migrate: ## Apply Prisma migrations
-	pnpm --filter @pg/db run migrate:deploy
+migrate: ## Sync the Prisma schema to the database (db push)
+	pnpm --filter @pg/db run db:push
 
 ingest: ## Run the ingestion pipeline (RSS -> clean -> chunk -> embed -> Qdrant)
 	pnpm --filter @pg/ingest run ingest

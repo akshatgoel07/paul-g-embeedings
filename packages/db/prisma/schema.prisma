@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// A Paul Graham essay fetched from the RSS feed.
+model Essay {
+  id           Int       @id @default(autoincrement())
+  title        String
+  description  String    @default("")
+  link         String    @unique
+  content      String // raw HTML
+  cleanContent String? // cleaned plain text used for chunking
+  embeddedAt   DateTime? // set once all chunks are embedded + upserted to Qdrant
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  chunks       Chunk[]
+}
+
+/// A chunk of an essay. The vector lives in Qdrant (keyed by `id`); Postgres is
+/// the durable source of truth for the text + metadata.
+model Chunk {
+  id          String   @id @default(cuid())
+  essayId     Int
+  essay       Essay    @relation(fields: [essayId], references: [id], onDelete: Cascade)
+  index       Int // position of the chunk within the essay
+  text        String
+  tokens      Int
+  contentHash String // sha256 of `text`; doubles as the embedding-cache key
+  createdAt   DateTime @default(now())
+
+  @@unique([essayId, index])
+  @@index([essayId])
+}
