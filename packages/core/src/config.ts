@@ -20,6 +20,7 @@ const EnvSchema = z.object({
     .default("http://www.aaronsw.com/2002/feeds/pgessays.rss"),
   CHUNK_TOKENS: z.coerce.number().int().positive().default(800),
   CHUNK_OVERLAP: z.coerce.number().int().nonnegative().default(120),
+  INGEST_LIMIT: z.coerce.number().int().positive().optional(), // cap essays per run (test/dev)
   RETRIEVE_TOP_K: z.coerce.number().int().positive().default(8),
   RERANK_TOP_N: z.coerce.number().int().positive().default(4),
   SEMANTIC_CACHE_THRESHOLD: z.coerce.number().min(0).max(1).default(0.95),

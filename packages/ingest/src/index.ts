@@ -20,8 +20,12 @@ async function main(): Promise<void> {
   await ensureSemanticCache();
 
   console.log(`→ Fetching RSS: ${cfg.PG_RSS_URL}`);
-  const essays = await fetchEssays(cfg.PG_RSS_URL);
-  console.log(`→ Found ${essays.length} essays\n`);
+  const all = await fetchEssays(cfg.PG_RSS_URL);
+  const essays = cfg.INGEST_LIMIT ? all.slice(0, cfg.INGEST_LIMIT) : all;
+  console.log(
+    `→ Found ${all.length} essays` +
+      (cfg.INGEST_LIMIT ? `, ingesting first ${essays.length}\n` : "\n"),
+  );
 
   let totalChunks = 0;
   for (const [i, e] of essays.entries()) {

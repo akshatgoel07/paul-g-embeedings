@@ -26,7 +26,7 @@ export async function fetchEssays(rssUrl: string): Promise<RssEssay[]> {
         link: it.link?.[0] ?? "",
       };
     })
-    .filter((e) => e.link.length > 0);
+    .filter((e) => e.link.includes(".html")); // drop the feed's homepage entry
 }
 
 export async function fetchHtml(url: string): Promise<string> {
