@@ -59,10 +59,12 @@ export default function App() {
           }));
         }
       }
-    } catch {
+    } catch (err) {
+      const detail =
+        err instanceof Error ? err.message : "Could not reach the API";
       patchLast((msg) => ({
         ...msg,
-        content: `${msg.content}\n\n⚠️ Could not reach the API.`,
+        content: `${msg.content}\n\n⚠️ ${detail}`,
       }));
     } finally {
       setBusy(false);

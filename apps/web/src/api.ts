@@ -16,8 +16,12 @@ export async function* streamChat(
     body: JSON.stringify({ message }),
     signal,
   });
-  if (!res.ok || !res.body) {
-    throw new Error(`Chat request failed: ${res.status}`);
+  if (!res.ok) {
+    const detail = await res.text().catch(() => "");
+    throw new Error(`API ${res.status}: ${detail || res.statusText}`);
+  }
+  if (!res.body) {
+    throw new Error("API returned no response body");
   }
 
   const reader = res.body.getReader();

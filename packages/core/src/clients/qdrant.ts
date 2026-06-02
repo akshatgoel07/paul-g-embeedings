@@ -9,6 +9,8 @@ export function qdrant(): QdrantClient {
     client = new QdrantClient({
       url: cfg.QDRANT_URL,
       apiKey: cfg.QDRANT_API_KEY || undefined,
+      // local server may trail the npm client by a few minor versions
+      checkCompatibility: false,
     });
   }
   return client;
