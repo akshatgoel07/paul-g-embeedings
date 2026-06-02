@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Explicit content sources so utility detection can't silently fail in dev. */
+@source "../index.html";
+@source "./**/*.{ts,tsx}";
+
 /* Design tokens — the whole palette + type system in one place (Emil: cohesion). */
 @theme {
   --color-bg: #0b0d10;
